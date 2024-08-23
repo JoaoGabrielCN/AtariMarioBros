@@ -10,15 +10,24 @@
 
 #include<SFML/Graphics.hpp>
 #include "Player.h"
+#include "Plataform.h"
+#include <vector>
+using namespace std;
 
 class Game {
+
 private:
 	void eventsLoop();
 	void update();
 	void draw();
+	void initializeVar();
+	void setPlataforms();
 	sf::RenderWindow window;
-	sf::CircleShape shape;
 	Player player;
+	Plataform floor;
+
+	vector<Plataform> plataforms;
+
 public:
 	Game();
 	void run();
