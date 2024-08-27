@@ -1,7 +1,6 @@
 #include "Player.h"
-#include <iostream>
 
-Player::Player(sf::RenderWindow &janela) {
+Player::Player(sf::RenderWindow &janela) { //construtor que define os atributos iniciais do player
 	window = &janela;
 
 	texture.loadFromFile("assets/mario.png");
@@ -10,46 +9,115 @@ Player::Player(sf::RenderWindow &janela) {
 	x = 0;
 	y = 0;
 
-	vx = 6.f;
+	vx = 6;
 	vy = 0;
 
+	gravity = 0.65;
+	jumpHeight = 14;
+
 	sprite.setPosition(x, y);
-	sprite.setOrigin(getWidth() * 0.5f, getHeight() * 0.5f);
+	sprite.setOrigin(getWidth() * 0.5f, getHeight() * 0.5f);//define a origem para o meio do sprite
 }
 
-void Player::update() {
+void Player::update(Plataform ground) { // atualiza a posiçao do player
 	walk();
+	jump(ground);
+	testColission(ground);
 	sprite.setPosition(x, y);
 
 }
 
 void Player::walk() {
-	vx = 6.f;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)
+	vx = 6;
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) //anda para direita
 			|| sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
 		x += vx;
 		sprite.setScale(1, 1);
 	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) //anda para esquerda
 			|| sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
 		vx = -vx;
 		x += vx;
 
-		sprite.setScale(-1, 1);
+		sprite.setScale(-1, 1); // gira o sprite do playet
 	}
 
-	if (x - getWidth() * 0.5 > window->getSize().x) {
-		x = 0;
+	if (x - getWidth() * 0.5 > window->getSize().x) { //faz ele ir de um lado da tela pro outro
+		setX(0);
 	}
 	if (x + getWidth() * 0.5 < 0) {
-		x = window->getSize().x;
+		setX(window->getSize().x);
 	}
 }
 
+void Player::jump(Plataform newPlataform) {
+
+	bool pressed = (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)
+			|| sf::Keyboard::isKeyPressed(sf::Keyboard::W));
+
+	if (onGround(newPlataform)) { //se ele estiver no chao sua vy é 0
+		vy = 0;
+	}
+
+	if (pressed && onGround(newPlataform)) { //faz ele oular
+		vy = -jumpHeight;
+	}
+
+	if (!onGround(newPlataform)) { //atualiza a velocidade no ar
+		vy += gravity;
+	}
+
+	y += vy; //atualiza a posiçao do player
+}
+
+bool Player::onGround(Plataform ground) { //testa se ele esta em cima de uma plataforma
+	if (sprite.getGlobalBounds().intersects(ground.sprite.getGlobalBounds())
+			&& vy >= 0) {
+		vy = 0;
+
+		return true;
+	}
+
+	return false;
+
+}
+
+void Player::plataformColision(Plataform plt) { //colisao horizontal e vertical com a plataforma
+	if (sprite.getGlobalBounds().intersects(plt.sprite.getGlobalBounds())
+			&& vy < 0) {
+
+		if (vx > 0) { //testa a colisao horizontal pela esquerda
+			if (getX() + getWidth() * 0.5 > plt.getX() + 15) {
+				y = plt.getY() + plt.getHeight() + getHeight() * 0.5;
+				vy = 0;
+			} else if (getY() + getHeight() * 0.5
+					< plt.getY() + plt.getHeight() * 0.75) {
+				setY(plt.getY() - getHeight() * 0.5f - 25);
+				vy = 0;
+			}
+		} else { //testa a colisao horizontal pela direita
+
+			if (plt.getX() + plt.getWidht() - 15 > getX() - getWidth() * 0.5) {
+				setY(plt.getY() + plt.getHeight() + getHeight() * 0.5);
+				vy = 0;
+			} else if (getY() + getHeight() * 0.5
+					< plt.getY() + plt.getHeight() * 0.75) {
+				setY(plt.getY() - getHeight() * 0.5f - 25);
+				vy = 0;
+			}
+		}
+
+
+	}
+}
+
+//funçoes get e set
+
 void Player::setPosition(float x, float y) {
-	this->x = x;
-	this->y = y;
+	setX(x);
+	setY(y);
 	sprite.setPosition(x, y);
 }
 

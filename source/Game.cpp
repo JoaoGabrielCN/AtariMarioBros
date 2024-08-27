@@ -1,13 +1,6 @@
-/*
- * Game.cpp
- *
- *  Created on: 21 de ago. de 2024
- *      Author: Aldo
- */
-
 #include "Game.h"
 
-Game::Game() : window(sf::VideoMode(800, 600), "SFML works!"), player(window) {
+Game::Game():window(sf::VideoMode(800, 600), "SFML works!"), player(window) {
 	initializeVar();
 }
 
@@ -18,16 +11,27 @@ void Game::eventsLoop() {
 			window.close();
 	}
 }
-
 void Game::update() {
-	player.update();
+    bool updated = false;
+
+    for (unsigned int i = 0; i < plataforms.size(); ++i) {
+        if (player.sprite.getGlobalBounds().intersects(plataforms[i].sprite.getGlobalBounds())) {
+            player.update(plataforms[i]);
+            updated = true;
+            break;
+        }
+    }
+
+    if (!updated) {
+        player.update(floor);
+    }
 }
 
 void Game::draw() {
 	window.clear();
 	window.draw(floor.sprite);
 	window.draw(player.sprite);
-	for (unsigned int i = 0; i < plataforms.size(); ++i) {
+	for (unsigned int i = 0; i < plataforms.size(); ++i){
 		plataforms[i].setSprite("assets/plataform.png");
 		window.draw(plataforms[i].sprite);
 	}
@@ -51,7 +55,7 @@ void Game::initializeVar() {
 	setPlataforms();
 }
 
-void Game::setPlataforms() {
+void Game::setPlataforms(){
 	Plataform newPlaform;
 	newPlaform.setSprite("assets/plataform.png");
 	newPlaform.setPosition(-111, 435);
@@ -62,7 +66,7 @@ void Game::setPlataforms() {
 	plataforms.push_back(newPlaform);
 
 	newPlaform.setSprite("assets/plataform.png");
-	newPlaform.setPosition(window.getSize().x * 0.5 - newPlaform.getWidht() * 0.5, 270);
+	newPlaform.setPosition(window.getSize().x * 0.5 - newPlaform.getWidht() * 0.5, 230);
 	plataforms.push_back(newPlaform);
 
 	newPlaform.setSprite("assets/plataform.png");

@@ -1,3 +1,4 @@
+
 /*
  * Game.h
  *
@@ -5,10 +6,10 @@
  *      Author: Aldo
  */
 
-#ifndef GAME_H_
-#define GAME_H_
+#ifndef SOURCE_GAME_H_
+#define SOURCE_GAME_H_
 
-#include<SFML/Graphics.hpp>
+
 #include "Player.h"
 #include "Plataform.h"
 #include <vector>
@@ -33,4 +34,4 @@ public:
 	void run();
 };
 
-#endif /* GAME_H_ */
+#endif /* SOURCE_GAME_H_ */

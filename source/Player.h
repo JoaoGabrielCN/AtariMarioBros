@@ -1,3 +1,4 @@
+
 /*
  * Player.h
  *
@@ -5,8 +6,9 @@
  *      Author: Aldo
  */
 
-#ifndef PLAYER_H_
-#define PLAYER_H_
+#ifndef SOURCE_PLAYER_H_
+#define SOURCE_PLAYER_H_
+
 #include<SFML/Graphics.hpp>
 #include"Plataform.h"
 
@@ -19,11 +21,15 @@ private:
 	float x;
 	float y;
 
+	float jumpHeight;
+	float gravity;
+
 public:
 	float vx;
 	float vy;
-	void update();
+	void update(Plataform ground);
 	void walk();
+	void jump(Plataform ground);
 
 	float getX();
 	float getY();
@@ -36,8 +42,13 @@ public:
 
 	void setPosition(float x, float y);
 
+	bool onGround(Plataform ground);
+	void testColission(Plataform plt);
+
+
+
 	sf::Sprite sprite;
 	Player(sf::RenderWindow &janela);
 };
 
-#endif /* PLAYER_H_ */
+#endif /* SOURCE_PLAYER_H_ */
