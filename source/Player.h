@@ -43,7 +43,7 @@ public:
 	void setPosition(float x, float y);
 
 	bool onGround(Plataform ground);
-	void testColission(Plataform plt);
+	void testCollision(Plataform plt);
 
 
 
