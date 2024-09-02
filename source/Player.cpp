@@ -16,7 +16,7 @@ Player::Player(sf::RenderWindow &janela) { //construtor que define os atributos 
 	jumpHeight = 14;
 
 	sprite.setPosition(x, y);
-	sprite.setOrigin(getWidth() * 0.5f, getHeight() * 0.5f); //define a origem para o meio do sprite
+	sprite.setOrigin(getWidth() * 0.5, getHeight() * 0.5); //define a origem para o meio do sprite
 }
 
 void Player::update(Plataform ground) { // atualiza a posiçao do player
@@ -55,11 +55,12 @@ void Player::walk() {
 void Player::jump(Plataform newPlataform) {
 
 	bool pressed = (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)
-			|| sf::Keyboard::isKeyPressed(sf::Keyboard::W));
+			|| sf::Keyboard::isKeyPressed(sf::Keyboard::W)
+			|| sf::Keyboard::isKeyPressed(sf::Keyboard::Up));
 
 	if (onGround(newPlataform)) { //se ele estiver no chao sua vy é 0
 		vy = 0;
-		setY(y - 2 );
+		setY(y - 2);
 	}
 
 	if (pressed && onGround(newPlataform)) { //faz ele oular
@@ -75,7 +76,8 @@ void Player::jump(Plataform newPlataform) {
 }
 
 bool Player::onGround(Plataform ground) { //testa se ele esta em cima de uma plataforma
-	if (sprite.getGlobalBounds().intersects(ground.sprite.getGlobalBounds())&& vy >= 0) {
+	if (sprite.getGlobalBounds().intersects(ground.sprite.getGlobalBounds())
+			&& vy >= 0) {
 
 		vy = 0;
 		setY(ground.getY() - getHeight() * 0.5 + 1);

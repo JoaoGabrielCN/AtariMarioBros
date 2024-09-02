@@ -11,6 +11,7 @@
 Plataform::Plataform() {
 	x = 0;
 	y = 0;
+
 }
 
 float Plataform::getHeight() {

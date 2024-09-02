@@ -12,6 +12,7 @@
 
 #include "Player.h"
 #include "Plataform.h"
+#include "Enemy.h"
 #include <vector>
 using namespace std;
 
@@ -22,12 +23,15 @@ private:
 	void update();
 	void draw();
 	void initializeVar();
-	void setPlataforms();
+
+
 	sf::RenderWindow window;
 	Player player;
-	Plataform floor;
 
+	Enemy enemy;
 	vector<Plataform> plataforms;
+
+	void setPlataforms();
 
 public:
 	Game();

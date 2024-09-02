@@ -1,34 +1,39 @@
-
 /*
- * Player.h
+ * Enemy.h
  *
- *  Created on: 21 de ago. de 2024
+ *  Created on: 29 de ago. de 2024
  *      Author: Aldo
  */
 
-#ifndef SOURCE_PLAYER_H_
-#define SOURCE_PLAYER_H_
-
 #include<SFML/Graphics.hpp>
 #include"Plataform.h"
+#include"Player.h"
+#include <string>
 
-class Player {
+using namespace std;
+
+
+#ifndef SOURCE_ENEMY_H_
+#define SOURCE_ENEMY_H_
+
+class Enemy {
 private:
 
-	sf::Texture texture;
 	sf::RenderWindow *window;
 
 	float x;
 	float y;
 
-	float jumpHeight;
 	float gravity;
 
 	float vx;
 	float vy;
 
+	int direction;
+
 public:
 	bool alive;
+
 	void update(Plataform ground);
 	void walk();
 	void jump(Plataform ground);
@@ -45,12 +50,10 @@ public:
 	void setPosition(float x, float y);
 
 	bool onGround(Plataform ground);
-	void testCollision(Plataform plt);
-
-
-
+	void setSprite(string path);
+	sf::Texture texture;
 	sf::Sprite sprite;
-	Player(sf::RenderWindow &janela);
+	Enemy(sf::RenderWindow &janela, int direction);
 };
 
-#endif /* SOURCE_PLAYER_H_ */
+#endif /* SOURCE_ENEMY_H_ */
