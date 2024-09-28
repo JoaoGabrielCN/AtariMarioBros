@@ -5,6 +5,9 @@
  *      Author: Aldo
  */
 
+#ifndef SOURCE_ENEMY_H_
+#define SOURCE_ENEMY_H_
+
 #include<SFML/Graphics.hpp>
 #include"Plataform.h"
 #include"Player.h"
@@ -13,8 +16,6 @@
 using namespace std;
 
 
-#ifndef SOURCE_ENEMY_H_
-#define SOURCE_ENEMY_H_
 
 class Enemy {
 private:
@@ -29,17 +30,22 @@ private:
 	float vx;
 	float vy;
 
-	int direction;
+
 
 public:
 	bool alive;
+	int direction;
+
+	bool downed;
 
 	void update(Plataform ground);
 	void walk();
-	void jump(Plataform ground);
 
 	float getX();
 	float getY();
+
+	sf::Clock clock;
+	bool clockStarted;
 
 	void setX(float x);
 	void setY(float y);
@@ -48,12 +54,21 @@ public:
 	float getWidth();
 
 	void setPosition(float x, float y);
+	void setDirection (int num);
+	int getDirection();
+
+	void testEnemyCollsion(Enemy &other);
 
 	bool onGround(Plataform ground);
 	void setSprite(string path);
 	sf::Texture texture;
 	sf::Sprite sprite;
 	Enemy(sf::RenderWindow &janela, int direction);
+
+	void setVx(float vx);
+	float getVx();
+
+	void getUp();
 };
 
 #endif /* SOURCE_ENEMY_H_ */

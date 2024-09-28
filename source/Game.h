@@ -14,6 +14,7 @@
 #include "Plataform.h"
 #include "Enemy.h"
 #include <vector>
+#include <iostream>
 using namespace std;
 
 class Game {
@@ -25,13 +26,17 @@ private:
 	void initializeVar();
 
 
-	sf::RenderWindow window;
-	Player player;
+	sf::RenderWindow window; //janela do programa
+	Player player; //personagem principal
 
-	Enemy enemy;
+	vector<Enemy> enemies;
+
 	vector<Plataform> plataforms;
 
 	void setPlataforms();
+	void setEnemies();
+
+	bool pause;
 
 public:
 	Game();

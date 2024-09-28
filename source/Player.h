@@ -12,6 +12,9 @@
 #include<SFML/Graphics.hpp>
 #include"Plataform.h"
 
+
+class Enemy;
+
 class Player {
 private:
 
@@ -21,7 +24,7 @@ private:
 	float x;
 	float y;
 
-	float jumpHeight;
+	float jumpHeight; // altura do pulo
 	float gravity;
 
 	float vx;
@@ -29,9 +32,11 @@ private:
 
 public:
 	bool alive;
+
 	void update(Plataform ground);
 	void walk();
 	void jump(Plataform ground);
+	bool belowPlataform;
 
 	float getX();
 	float getY();
@@ -44,8 +49,10 @@ public:
 
 	void setPosition(float x, float y);
 
-	bool onGround(Plataform ground);
-	void testCollision(Plataform plt);
+	bool onGround(Plataform ground); //teste se ele esta em cima do chão
+	void testCollisionPlataform(Plataform plt); //testa se ele esta batendo em alguma plataforma
+	void testCollisionEnemy(Enemy& enemy);
+	void killEnemy(Plataform &plate, Enemy& enemy);
 
 
 

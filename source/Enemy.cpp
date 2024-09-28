@@ -7,14 +7,21 @@
 
 #include "Enemy.h"
 
+int Enemy::getDirection() {
+	return this->direction;
+}
+
 Enemy::Enemy(sf::RenderWindow &janela , int direction) {
+
+	alive = true;
+	downed = false;
 
 
 	window = &janela;
 
 	x = 0;
 	y = 0;
-	vx = 1.5;
+	vx = 1;
 	vy = 0;
 
 	this->direction = direction;
@@ -28,6 +35,9 @@ Enemy::Enemy(sf::RenderWindow &janela , int direction) {
 	setPosition(x, y);
 }
 
+
+
+
 void Enemy::update(Plataform ground) {
 
 	walk();
@@ -37,12 +47,25 @@ void Enemy::update(Plataform ground) {
 
 void Enemy::walk() {
 
+
+
+	if(!alive){
+		x = 10000;
+
+	}
+
+	if(downed){
+		vx = 0;
+		return;
+		sprite.setColor(sf::Color::Red);
+	}
+
 	if (direction == 1) {
 
 		sprite.setScale(-1, 1);
 	} else {
 
-		vx = -1.5;
+		vx = -1;
 
 		sprite.setScale(1, 1);
 	}
@@ -103,9 +126,51 @@ float Enemy::getWidth() {
 	return sprite.getGlobalBounds().width;
 }
 
+void Enemy::setDirection(int num){
+	direction = num;
+}
+
 void Enemy::setSprite(std::string path) {
 	texture.loadFromFile(path);
 	sprite.setTexture(texture);
 }
 
+void Enemy::testEnemyCollsion(Enemy &other) {
+    if (this != &other && sprite.getGlobalBounds().intersects(other.sprite.getGlobalBounds()) && !downed && !other.downed) {
 
+    		direction = -direction;
+            vx = -vx;
+            other.setDirection(-other.getDirection());
+            other.setVx(-other.getVx());
+
+        }
+    }
+
+
+void Enemy::setVx(float vx){
+	this->vx = vx;
+}
+
+float Enemy::getVx(){
+	return vx;
+}
+
+void Enemy::getUp() {
+    if (downed && alive) {
+        if (!clockStarted) {
+
+            clock.restart();
+            clockStarted = true;
+        }
+
+        if (clock.getElapsedTime().asSeconds() > 6) {
+            downed = false;
+            clockStarted = false;
+            vx = 1 *  direction;
+            sprite.setColor(sf::Color::White);
+        }
+    } else {
+        clock.restart();
+        clockStarted = false;
+    }
+}

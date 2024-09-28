@@ -1,4 +1,13 @@
 #include "Player.h"
+#include "Enemy.h"
+
+void Player::killEnemy(Plataform &plate, Enemy &enemy) {
+	if(belowPlataform && enemy.getX() + 35 > getX() && enemy.getX() - 35 < getX() && enemy.onGround(plate) && y - enemy.getY() < 100){
+		enemy.downed = true;
+		enemy.sprite.setColor(sf::Color::Red);
+	}
+
+}
 
 Player::Player(sf::RenderWindow &janela) { //construtor que define os atributos iniciais do player
 	window = &janela;
@@ -22,12 +31,14 @@ Player::Player(sf::RenderWindow &janela) { //construtor que define os atributos 
 void Player::update(Plataform ground) { // atualiza a posiçao do player
 	walk();
 	jump(ground);
-	testCollision(ground);
+	testCollisionPlataform(ground);
 	sprite.setPosition(x, y);
+
 
 }
 
 void Player::walk() {
+
 	vx = 6;
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) //anda para direita
@@ -58,10 +69,7 @@ void Player::jump(Plataform newPlataform) {
 			|| sf::Keyboard::isKeyPressed(sf::Keyboard::W)
 			|| sf::Keyboard::isKeyPressed(sf::Keyboard::Up));
 
-	if (onGround(newPlataform)) { //se ele estiver no chao sua vy é 0
-		vy = 0;
-		setY(y - 2);
-	}
+
 
 	if (pressed && onGround(newPlataform)) { //faz ele oular
 		vy = -jumpHeight;
@@ -76,6 +84,7 @@ void Player::jump(Plataform newPlataform) {
 }
 
 bool Player::onGround(Plataform ground) { //testa se ele esta em cima de uma plataforma
+
 	if (sprite.getGlobalBounds().intersects(ground.sprite.getGlobalBounds())
 			&& vy >= 0) {
 
@@ -89,7 +98,9 @@ bool Player::onGround(Plataform ground) { //testa se ele esta em cima de uma pla
 
 }
 
-void Player::testCollision(Plataform plt) { //colisao horizontal e vertical com a plataforma
+void Player::testCollisionPlataform(Plataform plt) { //colisao horizontal e vertical com a plataforma
+	belowPlataform = false;
+
 	if (sprite.getGlobalBounds().intersects(plt.sprite.getGlobalBounds())
 			&& vy < 0) {
 
@@ -97,6 +108,8 @@ void Player::testCollision(Plataform plt) { //colisao horizontal e vertical com 
 			if (getX() + getWidth() * 0.5 > plt.getX() + 15) {
 				y = plt.getY() + plt.getHeight() + getHeight() * 0.5;
 				vy = 0;
+
+				belowPlataform = true;
 			} else {
 				setY(plt.getY() - getHeight() * 0.5f - 25);
 				vy = 0;
@@ -106,6 +119,9 @@ void Player::testCollision(Plataform plt) { //colisao horizontal e vertical com 
 			if (plt.getX() + plt.getWidht() - 15 > getX() - getWidth() * 0.5) {
 				setY(plt.getY() + plt.getHeight() + getHeight() * 0.5);
 				vy = 0;
+
+				belowPlataform = true;
+
 			} else {
 				setY(plt.getY() - getHeight() * 0.5f - 25);
 				vy = 0;
@@ -113,6 +129,8 @@ void Player::testCollision(Plataform plt) { //colisao horizontal e vertical com 
 		}
 
 	}
+
+
 }
 
 //funçoes get e set
@@ -145,4 +163,17 @@ float Player::getHeight() {
 
 float Player::getWidth() {
 	return sprite.getGlobalBounds().width;
+}
+
+void Player::testCollisionEnemy(Enemy &enemy) {
+	if(sprite.getGlobalBounds().intersects(enemy.sprite.getGlobalBounds())){
+		if(enemy.alive && !enemy.downed){
+			alive = false;
+
+		}
+		if(enemy.downed){
+			enemy.alive = false;
+		}
+
+	}
 }

@@ -8,6 +8,7 @@
 
 #ifndef SOURCE_PLATAFORM_H_
 #define SOURCE_PLATAFORM_H_
+
 #include<SFML/Graphics.hpp>
 #include<string>
 
@@ -21,6 +22,7 @@ private:
 
 public:
 	sf::Sprite sprite;
+
 	float getHeight();
 	float getWidht();
 
