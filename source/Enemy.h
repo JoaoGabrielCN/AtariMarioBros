@@ -15,8 +15,6 @@
 
 using namespace std;
 
-
-
 class Enemy {
 private:
 
@@ -29,8 +27,6 @@ private:
 
 	float vx;
 	float vy;
-
-
 
 public:
 	bool alive;
@@ -54,7 +50,7 @@ public:
 	float getWidth();
 
 	void setPosition(float x, float y);
-	void setDirection (int num);
+	void setDirection(int num);
 	int getDirection();
 
 	void testEnemyCollsion(Enemy &other);
@@ -63,7 +59,7 @@ public:
 	void setSprite(string path);
 	sf::Texture texture;
 	sf::Sprite sprite;
-	Enemy(sf::RenderWindow &janela, int direction);
+	Enemy(sf::RenderWindow &janela, int direction, sf::Texture& texture);
 
 	void setVx(float vx);
 	float getVx();

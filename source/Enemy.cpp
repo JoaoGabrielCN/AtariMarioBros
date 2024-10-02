@@ -11,7 +11,9 @@ int Enemy::getDirection() {
 	return this->direction;
 }
 
-Enemy::Enemy(sf::RenderWindow &janela , int direction) {
+Enemy::Enemy(sf::RenderWindow &janela , int direction, sf::Texture& texture) {
+
+	this->texture = texture;
 
 	alive = true;
 	downed = false;
@@ -29,7 +31,7 @@ Enemy::Enemy(sf::RenderWindow &janela , int direction) {
 	alive = true;
 	gravity = 4;
 
-	texture.loadFromFile("assets/koopa.png");
+
 	sprite.setTexture(texture);
 	sprite.setOrigin(getWidth() * 0.5, getHeight() * 0.5);
 	setPosition(x, y);

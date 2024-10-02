@@ -1,4 +1,3 @@
-
 /*
  * Game.h
  *
@@ -8,7 +7,6 @@
 
 #ifndef SOURCE_GAME_H_
 #define SOURCE_GAME_H_
-
 
 #include "Player.h"
 #include "Plataform.h"
@@ -20,23 +18,25 @@ using namespace std;
 class Game {
 
 private:
+
+	sf::RenderWindow window; //janela do programa
+	Player player; //personagem principal
+	vector<Enemy> enemies;
+	vector<Plataform> plataforms;
+
+	bool pause;
+
+	sf::Texture enemyTexture;
+	sf::Texture plataformsTexture;
+	sf::Texture floorTexture;
+
+
 	void eventsLoop();
 	void update();
 	void draw();
 	void initializeVar();
-
-
-	sf::RenderWindow window; //janela do programa
-	Player player; //personagem principal
-
-	vector<Enemy> enemies;
-
-	vector<Plataform> plataforms;
-
 	void setPlataforms();
 	void setEnemies();
-
-	bool pause;
 
 public:
 	Game();

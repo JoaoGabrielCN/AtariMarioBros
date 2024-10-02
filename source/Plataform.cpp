@@ -8,12 +8,19 @@
 
 #include "Plataform.h"
 
-Plataform::Plataform() {
+Plataform::Plataform(sf::Texture& texture) {
+	this->texture = texture;
+
+	sprite.setTexture(texture);
+
 	x = 0;
 	y = 0;
 
+}
 
-
+Plataform::Plataform(){
+	x = 0;
+	y = 0;
 }
 
 float Plataform::getHeight() { // pega a altura da plataforma

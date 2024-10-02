@@ -1,6 +1,8 @@
 #include "Player.h"
 #include "Enemy.h"
 
+
+
 void Player::killEnemy(Plataform &plate, Enemy &enemy) {
 	if(belowPlataform && enemy.getX() + 35 > getX() && enemy.getX() - 35 < getX() && enemy.onGround(plate) && y - enemy.getY() < 100){
 		enemy.downed = true;
@@ -73,7 +75,8 @@ void Player::jump(Plataform newPlataform) {
 
 	if (pressed && onGround(newPlataform)) { //faz ele oular
 		vy = -jumpHeight;
-		setPosition(x, y - 1);
+		setY(y - 1);
+		setPosition(x, y);
 	}
 
 	if (!onGround(newPlataform)) { //atualiza a velocidade no ar
@@ -111,7 +114,7 @@ void Player::testCollisionPlataform(Plataform plt) { //colisao horizontal e vert
 
 				belowPlataform = true;
 			} else {
-				setY(plt.getY() - getHeight() * 0.5f - 25);
+				setY(plt.getY() - getHeight() * 0.5 - 25);
 				vy = 0;
 			}
 		} else { //testa a colisao horizontal pela direita
@@ -131,6 +134,19 @@ void Player::testCollisionPlataform(Plataform plt) { //colisao horizontal e vert
 	}
 
 
+}
+
+void Player::testCollisionEnemy(Enemy &enemy) {
+	if(sprite.getGlobalBounds().intersects(enemy.sprite.getGlobalBounds())){
+		if(enemy.alive && !enemy.downed){
+			alive = false;
+
+		}
+		if(enemy.downed){
+			enemy.alive = false;
+		}
+
+	}
 }
 
 //funçoes get e set
@@ -165,15 +181,4 @@ float Player::getWidth() {
 	return sprite.getGlobalBounds().width;
 }
 
-void Player::testCollisionEnemy(Enemy &enemy) {
-	if(sprite.getGlobalBounds().intersects(enemy.sprite.getGlobalBounds())){
-		if(enemy.alive && !enemy.downed){
-			alive = false;
 
-		}
-		if(enemy.downed){
-			enemy.alive = false;
-		}
-
-	}
-}

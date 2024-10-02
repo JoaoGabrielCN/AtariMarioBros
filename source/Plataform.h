@@ -28,6 +28,7 @@ public:
 
 	float getX();
 	float getY();
+	Plataform(sf::Texture& texture);
 	Plataform();
 	void setPosition(float x, float y);
 	void setSprite(std::string path);
