@@ -11,6 +11,7 @@
 #include "Player.h"
 #include "Plataform.h"
 #include "Enemy.h"
+#include "Pipe.h"
 #include <vector>
 #include <iostream>
 using namespace std;
@@ -23,20 +24,23 @@ private:
 	Player player; //personagem principal
 	vector<Enemy> enemies;
 	vector<Plataform> plataforms;
+	vector<Pipe> pipes;
 
-	bool pause;
+
 
 	sf::Texture enemyTexture;
 	sf::Texture plataformsTexture;
 	sf::Texture floorTexture;
+	sf::Texture pipeTexture;
 
-
+	bool pause();
 	void eventsLoop();
 	void update();
 	void draw();
 	void initializeVar();
 	void setPlataforms();
 	void setEnemies();
+	void setPipes();
 
 public:
 	Game();

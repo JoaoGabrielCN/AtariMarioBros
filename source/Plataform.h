@@ -14,7 +14,7 @@
 
 class Plataform {
 
-private:
+protected:
 	sf::Texture texture;
 
 	float x;

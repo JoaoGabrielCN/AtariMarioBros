@@ -65,6 +65,8 @@ public:
 	float getVx();
 
 	void getUp();
+
+	void toggleDirection();
 };
 
 #endif /* SOURCE_ENEMY_H_ */

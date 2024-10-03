@@ -1,9 +1,7 @@
 #include "Game.h"
 
-Game::Game() : window(sf::VideoMode(800, 600), "SFML works!"), player(window) {
-
+Game::Game() : window(sf::VideoMode(800, 600), "SFML works!"), player(window){
 	initializeVar();
-
 }
 
 
@@ -34,8 +32,7 @@ void Game::update() {
 		bool enemyUpdated = false;
 
 		for (unsigned int j = 0; j < plataforms.size(); ++j) {
-			if (enemies[i].sprite.getGlobalBounds().intersects(
-					plataforms[j].sprite.getGlobalBounds())) {
+			if (enemies[i].sprite.getGlobalBounds().intersects(plataforms[j].sprite.getGlobalBounds())) {
 				enemies[i].update(plataforms[j]);
 				enemyUpdated = true;
 				break;
@@ -65,15 +62,19 @@ void Game::update() {
 
 		}
 
+		pipes[0].testEnemyCollision(enemies[i], pipes[2]);
+		pipes[1].testEnemyCollision(enemies[i], pipes[3]);
 	}
 
 }
 
 void Game::draw() {
 
-
+if(!pause()){
 		window.clear();
-		window.draw(player.sprite);
+		for(unsigned int i = 0; i < pipes.size(); i++){
+			window.draw(pipes[i].sprite);
+		}
 
 		for (unsigned int i = 0; i < plataforms.size(); ++i) {
 			window.draw(plataforms[i].sprite);
@@ -82,9 +83,53 @@ void Game::draw() {
 		for (unsigned int i = 0; i < enemies.size(); ++i) {
 			window.draw(enemies[i].sprite);
 		}
+
+		window.draw(player.sprite);
+
 		window.display();
 
+	}
+}
 
+void Game::setPipes() {
+	Pipe newPipe(pipeTexture);
+
+	newPipe.setPosition(0, window.getSize().y - plataforms[0].getHeight() - newPipe.getHeight()- 20);
+	newPipe.setScale(1);
+	pipes.push_back(newPipe);
+
+
+	newPipe.setPosition(window.getSize().x, window.getSize().y - plataforms[0].getHeight() - newPipe.getHeight()- 20);
+	newPipe.setScale(-1);
+	pipes.push_back(newPipe);
+
+	newPipe.setPosition(0, plataforms[6].getY() - newPipe.getHeight()- 20);
+	newPipe.setScale(1);
+	pipes.push_back(newPipe);
+
+	newPipe.setPosition(window.getSize().x, plataforms[6].getY() - newPipe.getHeight()- 20);
+	newPipe.setScale(-1);
+	pipes.push_back(newPipe);
+}
+
+bool Game::pause() {
+	if(!player.alive){
+		return true;
+	}
+
+	int cont = 0;
+
+	for (unsigned int i = 0; i < enemies.size(); ++i) {
+		if(!enemies[i].alive){
+			cont ++;
+		}
+	}
+
+	if(cont == static_cast<int>(enemies.size())){
+		return true;
+	}
+
+	return false;
 }
 
 void Game::run() {
@@ -97,11 +142,13 @@ void Game::run() {
 
 void Game::initializeVar() {
 	window.setVerticalSyncEnabled(true); // ativa VSync
-	pause = false;
+	window.setFramerateLimit(200);
+
 
 	enemyTexture.loadFromFile("assets/koopa.png");
 	plataformsTexture.loadFromFile("assets/plataform.png");
 	floorTexture.loadFromFile("assets/floor.png");
+	pipeTexture.loadFromFile("assets/pipe.png");
 
 	Plataform floor(floorTexture);
 
@@ -112,6 +159,7 @@ void Game::initializeVar() {
 
 	setPlataforms();
 	setEnemies();
+	setPipes();
 
 
 
@@ -128,8 +176,7 @@ void Game::setEnemies() { //cria os inimigos e os adiciona em um vector
 	newEnemy.setDirection(-1);
 	enemies.push_back(newEnemy);
 
-	newEnemy.setPosition(window.getSize().x * 0.5,
-			230 - newEnemy.getHeight() * 0.5);
+	newEnemy.setPosition(window.getSize().x * 0.5, 230 - newEnemy.getHeight() * 0.5);
 	newEnemy.setDirection(1);
 	enemies.push_back(newEnemy);
 
@@ -139,28 +186,24 @@ void Game::setPlataforms() { // cria todas as plataformas e os adiciona em um ve
 	Plataform newPlaform(plataformsTexture);
 
 
-	newPlaform.setPosition(-111, 435);
+	newPlaform.setPosition(-111, 425);
 	plataforms.push_back(newPlaform);
 
-	newPlaform.setPosition(window.getSize().x - newPlaform.getWidht() + 111,
-			435);
+	newPlaform.setPosition(window.getSize().x - newPlaform.getWidht() + 111, 425);
 	plataforms.push_back(newPlaform);
 
-	newPlaform.setPosition(
-			window.getSize().x * 0.5 - newPlaform.getWidht() * 0.5, 230);
+	newPlaform.setPosition(window.getSize().x * 0.5 - newPlaform.getWidht() * 0.5, 220);
 	plataforms.push_back(newPlaform);
 
-	newPlaform.setPosition(-259, 300);
+	newPlaform.setPosition(-259, 310);
 	plataforms.push_back(newPlaform);
 
-	newPlaform.setPosition(window.getSize().x - newPlaform.getWidht() + 259,
-			300);
+	newPlaform.setPosition(window.getSize().x - newPlaform.getWidht() + 259, 310);
 	plataforms.push_back(newPlaform);
 
 	newPlaform.setPosition(-74, 110);
 	plataforms.push_back(newPlaform);
 
-	newPlaform.setPosition(window.getSize().x - newPlaform.getWidht() + 74,
-			110);
+	newPlaform.setPosition(window.getSize().x - newPlaform.getWidht() + 74,110);
 	plataforms.push_back(newPlaform);
 }

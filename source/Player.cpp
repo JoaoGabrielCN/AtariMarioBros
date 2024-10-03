@@ -4,7 +4,7 @@
 
 
 void Player::killEnemy(Plataform &plate, Enemy &enemy) {
-	if(belowPlataform && enemy.getX() + 35 > getX() && enemy.getX() - 35 < getX() && enemy.onGround(plate) && y - enemy.getY() < 100){
+	if(belowPlataform && enemy.getX() + 35 > getX() && enemy.getX() - 35 < getX() && enemy.onGround(plate) && y - enemy.getY() < 100 && enemy.getY() - y < 100){
 		enemy.downed = true;
 		enemy.sprite.setColor(sf::Color::Red);
 	}
@@ -16,6 +16,8 @@ Player::Player(sf::RenderWindow &janela) { //construtor que define os atributos 
 
 	texture.loadFromFile("assets/mario.png");
 	sprite.setTexture(texture);
+
+	alive = true;
 
 	x = 0;
 	y = 0;
@@ -107,7 +109,7 @@ void Player::testCollisionPlataform(Plataform plt) { //colisao horizontal e vert
 	if (sprite.getGlobalBounds().intersects(plt.sprite.getGlobalBounds())
 			&& vy < 0) {
 
-		if (vx > 0) { //testa a colisao horizontal pela esquerda
+		if (vx > 0) { //testa a colisao horizontal pela esquerda e colisao vertical
 			if (getX() + getWidth() * 0.5 > plt.getX() + 15) {
 				y = plt.getY() + plt.getHeight() + getHeight() * 0.5;
 				vy = 0;
@@ -117,7 +119,7 @@ void Player::testCollisionPlataform(Plataform plt) { //colisao horizontal e vert
 				setY(plt.getY() - getHeight() * 0.5 - 25);
 				vy = 0;
 			}
-		} else { //testa a colisao horizontal pela direita
+		} else { //testa a colisao horizontal pela direita e colisao vertical
 
 			if (plt.getX() + plt.getWidht() - 15 > getX() - getWidth() * 0.5) {
 				setY(plt.getY() + plt.getHeight() + getHeight() * 0.5);

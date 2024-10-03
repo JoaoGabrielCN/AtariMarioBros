@@ -23,7 +23,7 @@ Enemy::Enemy(sf::RenderWindow &janela , int direction, sf::Texture& texture) {
 
 	x = 0;
 	y = 0;
-	vx = 1;
+	vx = 1.2;
 	vy = 0;
 
 	this->direction = direction;
@@ -63,11 +63,11 @@ void Enemy::walk() {
 	}
 
 	if (direction == 1) {
-
+		vx = 1.2;
 		sprite.setScale(-1, 1);
 	} else {
 
-		vx = -1;
+		vx = -1.2;
 
 		sprite.setScale(1, 1);
 	}
@@ -138,7 +138,7 @@ void Enemy::setSprite(std::string path) {
 }
 
 void Enemy::testEnemyCollsion(Enemy &other) {
-    if (this != &other && sprite.getGlobalBounds().intersects(other.sprite.getGlobalBounds()) && !downed && !other.downed) {
+    if (this != &other && sprite.getGlobalBounds().intersects(other.sprite.getGlobalBounds())) {
 
     		direction = -direction;
             vx = -vx;
@@ -175,4 +175,8 @@ void Enemy::getUp() {
         clock.restart();
         clockStarted = false;
     }
+}
+
+void Enemy::toggleDirection() {
+	direction = -direction;
 }
