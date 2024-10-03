@@ -1,10 +1,3 @@
-/*
- * Pipe.cpp
- *
- *  Created on: 2 de out. de 2024
- *      Author: Aldo
- */
-
 #include "Pipe.h"
 
 Pipe::Pipe() {

@@ -1,8 +1,10 @@
 #include "source/Game.h"
 
 int main() {
-	Game game;
-	game.run();
+	Game* game = new Game;
+	game->run();
+
+	delete game;
 
 	return 0;
 }

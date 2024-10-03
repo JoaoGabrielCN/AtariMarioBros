@@ -7,9 +7,6 @@
 
 #include "Enemy.h"
 
-int Enemy::getDirection() {
-	return this->direction;
-}
 
 Enemy::Enemy(sf::RenderWindow &janela , int direction, sf::Texture& texture) {
 
@@ -42,6 +39,8 @@ Enemy::Enemy(sf::RenderWindow &janela , int direction, sf::Texture& texture) {
 
 void Enemy::update(Plataform ground) {
 
+
+
 	walk();
 	onGround(ground);
 	setPosition(x, y);
@@ -49,17 +48,14 @@ void Enemy::update(Plataform ground) {
 
 void Enemy::walk() {
 
-
-
 	if(!alive){
 		x = 10000;
-
 	}
 
 	if(downed){
 		vx = 0;
-		return;
 		sprite.setColor(sf::Color::Red);
+		return;
 	}
 
 	if (direction == 1) {
@@ -68,18 +64,12 @@ void Enemy::walk() {
 	} else {
 
 		vx = -1.2;
-
 		sprite.setScale(1, 1);
 	}
 
 	x += vx;
+	testWindowColission();
 
-	if (x - getWidth() * 0.5 > window->getSize().x) { //faz ele ir de um lado da tela pro outro
-		setX(0);
-	}
-	if (x + getWidth() * 0.5 < 0) {
-		setX(window->getSize().x);
-	}
 }
 
 bool Enemy::onGround(Plataform ground) {
@@ -95,12 +85,68 @@ bool Enemy::onGround(Plataform ground) {
 	y += vy;
 
 	return false;
+}
 
+
+void Enemy::testEnemyCollsion(Enemy &other) {
+    if (this != &other && sprite.getGlobalBounds().intersects(other.sprite.getGlobalBounds())) {
+
+    		direction = -direction;
+            vx = -vx;
+            other.setDirection(-other.getDirection());
+            other.setVx(-other.getVx());
+
+        }
+    }
+
+
+
+void Enemy::getUp() {
+    if (downed && alive) {
+        if (!clockStarted) {
+
+            clock.restart();
+            clockStarted = true;
+        }
+
+        if (clock.getElapsedTime().asSeconds() > 6) {
+            downed = false;
+            clockStarted = false;
+            vx = 1 *  direction;
+            sprite.setColor(sf::Color::White);
+        }
+    } else {
+        clock.restart();
+        clockStarted = false;
+    }
+}
+
+
+void Enemy::testWindowColission() {
+	if (x - getWidth() * 0.5 > window->getSize().x) { //faz ele ir de um lado da tela pro outro
+		setX(0);
+	}
+	if (x + getWidth() * 0.5 < 0) {
+		setX(window->getSize().x);
+	}
+}
+
+void Enemy::toggleDirection() {
+	direction = -direction;
+}
+
+void Enemy::setVx(float vx){
+	this->vx = vx;
+}
+
+float Enemy::getVx(){
+	return vx;
 }
 
 void Enemy::setPosition(float x, float y) {
-	setX(x);
-	setY(y);
+	this->x = x;
+	this->y = y;
+
 	sprite.setPosition(x, y);
 }
 
@@ -137,46 +183,8 @@ void Enemy::setSprite(std::string path) {
 	sprite.setTexture(texture);
 }
 
-void Enemy::testEnemyCollsion(Enemy &other) {
-    if (this != &other && sprite.getGlobalBounds().intersects(other.sprite.getGlobalBounds())) {
-
-    		direction = -direction;
-            vx = -vx;
-            other.setDirection(-other.getDirection());
-            other.setVx(-other.getVx());
-
-        }
-    }
-
-
-void Enemy::setVx(float vx){
-	this->vx = vx;
+int Enemy::getDirection() {
+	return this->direction;
 }
 
-float Enemy::getVx(){
-	return vx;
-}
 
-void Enemy::getUp() {
-    if (downed && alive) {
-        if (!clockStarted) {
-
-            clock.restart();
-            clockStarted = true;
-        }
-
-        if (clock.getElapsedTime().asSeconds() > 6) {
-            downed = false;
-            clockStarted = false;
-            vx = 1 *  direction;
-            sprite.setColor(sf::Color::White);
-        }
-    } else {
-        clock.restart();
-        clockStarted = false;
-    }
-}
-
-void Enemy::toggleDirection() {
-	direction = -direction;
-}

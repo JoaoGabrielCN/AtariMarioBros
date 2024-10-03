@@ -1,11 +1,3 @@
-
-/*
- * Plataform.h
- *
- *  Created on: 21 de ago. de 2024
- *      Author: Aldo
- */
-
 #ifndef SOURCE_PLATAFORM_H_
 #define SOURCE_PLATAFORM_H_
 
@@ -31,7 +23,9 @@ public:
 	Plataform(sf::Texture& texture);
 	Plataform();
 	void setPosition(float x, float y);
-	void setSprite(std::string path);
+	void setTexture(sf::Texture& texture);
 };
+
+
 
 #endif /* SOURCE_PLATAFORM_H_ */

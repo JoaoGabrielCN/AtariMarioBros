@@ -1,11 +1,3 @@
-
-/*
- * Plataform.cpp
- *
- *  Created on: 21 de ago. de 2024
- *      Author: Aldo
- */
-
 #include "Plataform.h"
 
 Plataform::Plataform(sf::Texture& texture) {
@@ -39,8 +31,9 @@ void Plataform::setPosition(float x, float y) { // define a posçao
 }
 
 
-void Plataform::setSprite(std::string path) { //define o sprite
-	texture.loadFromFile(path);
+void Plataform::setTexture(sf::Texture& texture) { //define o sprite
+	this->texture = texture;
+
 	sprite.setTexture(texture);
 }
 

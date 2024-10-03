@@ -1,10 +1,3 @@
-/*
- * Enemy.h
- *
- *  Created on: 29 de ago. de 2024
- *      Author: Aldo
- */
-
 #ifndef SOURCE_ENEMY_H_
 #define SOURCE_ENEMY_H_
 
@@ -31,23 +24,16 @@ private:
 public:
 	bool alive;
 	int direction;
-
 	bool downed;
-
-	void update(Plataform ground);
-	void walk();
-
-	float getX();
-	float getY();
-
-	sf::Clock clock;
 	bool clockStarted;
 
-	void setX(float x);
-	void setY(float y);
+	sf::Texture texture;
+	sf::Sprite sprite;
+	sf::Clock clock;
 
-	float getHeight();
-	float getWidth();
+	Enemy(sf::RenderWindow &janela, int direction, sf::Texture& texture);
+	void update(Plataform ground);
+	void walk();
 
 	void setPosition(float x, float y);
 	void setDirection(int num);
@@ -57,16 +43,23 @@ public:
 
 	bool onGround(Plataform ground);
 	void setSprite(string path);
-	sf::Texture texture;
-	sf::Sprite sprite;
-	Enemy(sf::RenderWindow &janela, int direction, sf::Texture& texture);
 
 	void setVx(float vx);
 	float getVx();
 
 	void getUp();
-
 	void toggleDirection();
+
+	float getX();
+	float getY();
+
+	void setX(float x);
+	void setY(float y);
+
+	float getHeight();
+	float getWidth();
+
+	void testWindowColission();
 };
 
 #endif /* SOURCE_ENEMY_H_ */

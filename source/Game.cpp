@@ -4,6 +4,13 @@ Game::Game() : window(sf::VideoMode(800, 600), "SFML works!"), player(window){
 	initializeVar();
 }
 
+void Game::run() {
+	while (window.isOpen()) {
+		eventsLoop();
+		update();
+		draw();
+	}
+}
 
 void Game::eventsLoop() { // loop de eventos
 	sf::Event event;
@@ -22,6 +29,18 @@ void Game::update() {
 			playerUpdated = true;
 			break;
 		}
+	}
+
+	if (player.sprite.getGlobalBounds().intersects(powButton.sprite.getGlobalBounds())) {
+			player.update(powButton);
+			playerUpdated = true;
+
+			if(player.belowPlataform){
+				for (unsigned int i = 0; i < enemies.size(); ++i) {
+					enemies[i].downed = true;
+					powButton.lifes--;
+				}
+			}
 	}
 
 	if (!playerUpdated) {
@@ -66,12 +85,17 @@ void Game::update() {
 		pipes[1].testEnemyCollision(enemies[i], pipes[3]);
 	}
 
+	powButton.update();
+	std::cout<<powButton.lifes<<endl;
 }
 
 void Game::draw() {
 
 if(!pause()){
 		window.clear();
+
+
+
 		for(unsigned int i = 0; i < pipes.size(); i++){
 			window.draw(pipes[i].sprite);
 		}
@@ -85,32 +109,14 @@ if(!pause()){
 		}
 
 		window.draw(player.sprite);
+		window.draw(powButton.sprite);
 
 		window.display();
 
 	}
 }
 
-void Game::setPipes() {
-	Pipe newPipe(pipeTexture);
 
-	newPipe.setPosition(0, window.getSize().y - plataforms[0].getHeight() - newPipe.getHeight()- 20);
-	newPipe.setScale(1);
-	pipes.push_back(newPipe);
-
-
-	newPipe.setPosition(window.getSize().x, window.getSize().y - plataforms[0].getHeight() - newPipe.getHeight()- 20);
-	newPipe.setScale(-1);
-	pipes.push_back(newPipe);
-
-	newPipe.setPosition(0, plataforms[6].getY() - newPipe.getHeight()- 20);
-	newPipe.setScale(1);
-	pipes.push_back(newPipe);
-
-	newPipe.setPosition(window.getSize().x, plataforms[6].getY() - newPipe.getHeight()- 20);
-	newPipe.setScale(-1);
-	pipes.push_back(newPipe);
-}
 
 bool Game::pause() {
 	if(!player.alive){
@@ -132,13 +138,6 @@ bool Game::pause() {
 	return false;
 }
 
-void Game::run() {
-	while (window.isOpen()) {
-		eventsLoop();
-		update();
-		draw();
-	}
-}
 
 void Game::initializeVar() {
 	window.setVerticalSyncEnabled(true); // ativa VSync
@@ -149,19 +148,20 @@ void Game::initializeVar() {
 	plataformsTexture.loadFromFile("assets/plataform.png");
 	floorTexture.loadFromFile("assets/floor.png");
 	pipeTexture.loadFromFile("assets/pipe.png");
+	powTexture.loadFromFile("assets/pow.png");
 
 	Plataform floor(floorTexture);
-
 	floor.setPosition(0, window.getSize().y - floor.getHeight());
 	plataforms.push_back(floor);
+
+	powButton.setTexture(powTexture);
+	powButton.setPosition(window.getSize().x * 0.5 - powButton.getWidht() * 0.5, 400);
 
 	player.setPosition(window.getSize().x * 0.5,window.getSize().y - floor.getHeight() - (player.getHeight() * 0.5));
 
 	setPlataforms();
 	setEnemies();
 	setPipes();
-
-
 
 }
 
@@ -206,4 +206,25 @@ void Game::setPlataforms() { // cria todas as plataformas e os adiciona em um ve
 
 	newPlaform.setPosition(window.getSize().x - newPlaform.getWidht() + 74,110);
 	plataforms.push_back(newPlaform);
+}
+
+void Game::setPipes() {
+	Pipe newPipe(pipeTexture);
+
+	newPipe.setPosition(0, window.getSize().y - plataforms[0].getHeight() - newPipe.getHeight()- 20);
+	newPipe.setScale(1);
+	pipes.push_back(newPipe);
+
+
+	newPipe.setPosition(window.getSize().x, window.getSize().y - plataforms[0].getHeight() - newPipe.getHeight()- 20);
+	newPipe.setScale(-1);
+	pipes.push_back(newPipe);
+
+	newPipe.setPosition(0, plataforms[6].getY() - newPipe.getHeight()- 20);
+	newPipe.setScale(1);
+	pipes.push_back(newPipe);
+
+	newPipe.setPosition(window.getSize().x, plataforms[6].getY() - newPipe.getHeight()- 20);
+	newPipe.setScale(-1);
+	pipes.push_back(newPipe);
 }

@@ -1,10 +1,3 @@
-/*
- * Game.h
- *
- *  Created on: 21 de ago. de 2024
- *      Author: Aldo
- */
-
 #ifndef SOURCE_GAME_H_
 #define SOURCE_GAME_H_
 
@@ -14,6 +7,8 @@
 #include "Pipe.h"
 #include <vector>
 #include <iostream>
+#include "PowBlock.h"
+
 using namespace std;
 
 class Game {
@@ -25,13 +20,14 @@ private:
 	vector<Enemy> enemies;
 	vector<Plataform> plataforms;
 	vector<Pipe> pipes;
-
+	PowBlock powButton;
 
 
 	sf::Texture enemyTexture;
 	sf::Texture plataformsTexture;
 	sf::Texture floorTexture;
 	sf::Texture pipeTexture;
+	sf::Texture powTexture;
 
 	bool pause();
 	void eventsLoop();

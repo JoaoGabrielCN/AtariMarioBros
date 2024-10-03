@@ -2,15 +2,6 @@
 #include "Enemy.h"
 
 
-
-void Player::killEnemy(Plataform &plate, Enemy &enemy) {
-	if(belowPlataform && enemy.getX() + 35 > getX() && enemy.getX() - 35 < getX() && enemy.onGround(plate) && y - enemy.getY() < 100 && enemy.getY() - y < 100){
-		enemy.downed = true;
-		enemy.sprite.setColor(sf::Color::Red);
-	}
-
-}
-
 Player::Player(sf::RenderWindow &janela) { //construtor que define os atributos iniciais do player
 	window = &janela;
 
@@ -89,10 +80,7 @@ void Player::jump(Plataform newPlataform) {
 }
 
 bool Player::onGround(Plataform ground) { //testa se ele esta em cima de uma plataforma
-
-	if (sprite.getGlobalBounds().intersects(ground.sprite.getGlobalBounds())
-			&& vy >= 0) {
-
+	if (sprite.getGlobalBounds().intersects(ground.sprite.getGlobalBounds()) && vy >= 0) {
 		vy = 0;
 		setY(ground.getY() - getHeight() * 0.5 + 1);
 
@@ -100,41 +88,46 @@ bool Player::onGround(Plataform ground) { //testa se ele esta em cima de uma pla
 	}
 
 	return false;
-
 }
 
-void Player::testCollisionPlataform(Plataform plt) { //colisao horizontal e vertical com a plataforma
+void Player::testCollisionPlataform(Plataform plataform) { //colisao horizontal e vertical com a plataforma
 	belowPlataform = false;
 
-	if (sprite.getGlobalBounds().intersects(plt.sprite.getGlobalBounds())
-			&& vy < 0) {
+	if (sprite.getGlobalBounds().intersects(plataform.sprite.getGlobalBounds()) && vy < 0) {
 
 		if (vx > 0) { //testa a colisao horizontal pela esquerda e colisao vertical
-			if (getX() + getWidth() * 0.5 > plt.getX() + 15) {
-				y = plt.getY() + plt.getHeight() + getHeight() * 0.5;
+			if (getX() + getWidth() * 0.5 > plataform.getX() + 15) {
+				y = plataform.getY() + plataform.getHeight() + getHeight() * 0.5;
 				vy = 0;
 
 				belowPlataform = true;
 			} else {
-				setY(plt.getY() - getHeight() * 0.5 - 25);
+				setY(plataform.getY() - getHeight() * 0.5 - 25);
 				vy = 0;
 			}
 		} else { //testa a colisao horizontal pela direita e colisao vertical
 
-			if (plt.getX() + plt.getWidht() - 15 > getX() - getWidth() * 0.5) {
-				setY(plt.getY() + plt.getHeight() + getHeight() * 0.5);
+			if (plataform.getX() + plataform.getWidht() - 15 > getX() - getWidth() * 0.5) {
+				setY(plataform.getY() + plataform.getHeight() + getHeight() * 0.5);
 				vy = 0;
 
 				belowPlataform = true;
 
 			} else {
-				setY(plt.getY() - getHeight() * 0.5f - 25);
+				setY(plataform.getY() - getHeight() * 0.5f - 25);
 				vy = 0;
 			}
 		}
-
 	}
+}
 
+void Player::killEnemy(Plataform &plataform, Enemy &enemy) {
+	if(belowPlataform && enemy.getX() + 35 > getX() && enemy.getX() - 35 < getX() &&
+	enemy.onGround(plataform) && y - enemy.getY() < 100 && enemy.getY() - y < 100){
+
+		enemy.downed = true;
+		enemy.sprite.setColor(sf::Color::Red);
+	}
 
 }
 
