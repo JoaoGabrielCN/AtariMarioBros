@@ -8,6 +8,7 @@
 #include <vector>
 #include <iostream>
 #include "PowBlock.h"
+#include <SFML/Audio.hpp>
 
 using namespace std;
 
@@ -29,6 +30,16 @@ private:
 	sf::Texture pipeTexture;
 	sf::Texture powTexture;
 
+	sf::Music theme;
+	sf::SoundBuffer bufferPow;
+	sf::Sound powSound;
+
+    sf::Font font;
+    sf::Text gameOverText;
+    sf::RectangleShape restartButton;
+    sf::Text restartButtonText;
+
+
 	bool pause();
 	void eventsLoop();
 	void update();
@@ -37,6 +48,16 @@ private:
 	void setPlataforms();
 	void setEnemies();
 	void setPipes();
+	void setTextures();
+	void setSounds();
+	void drawGameOver();
+	void testRestartClick();
+	void resetGame();
+	void setTexts();
+
+  ;
+
+
 
 public:
 	Game();

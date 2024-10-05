@@ -7,6 +7,7 @@ Pipe::Pipe() {
 
 	sprite.setPosition(x, y);
 
+
 }
 
 Pipe::Pipe(float x, float y, int scale, sf::Texture& texture) {
@@ -19,6 +20,8 @@ Pipe::Pipe(float x, float y, int scale, sf::Texture& texture) {
 	sprite.setPosition(x, y);
 	sprite.setScale(scale, 1);
 
+
+
 }
 
 Pipe::Pipe(sf::Texture& texture) {
@@ -30,6 +33,7 @@ Pipe::Pipe(sf::Texture& texture) {
 	sprite.setTexture(texture);
 	sprite.setPosition(x, y);
 	sprite.setScale(scale, 1);
+
 
 
 }
@@ -71,7 +75,7 @@ float Pipe::getHeight() {
 	return sprite.getGlobalBounds().height;
 }
 
-void Pipe::testEnemyCollision(Enemy &enemy, Pipe& other){
+void Pipe::pipeTravel(Enemy &enemy, Pipe& other){
 	if(this->sprite.getGlobalBounds().intersects(enemy.sprite.getGlobalBounds())){
 		if(scale == 1){
 			enemy.setPosition(other.getX() + other.getWidth(), other.getY() + other.getHeight() - enemy.getHeight()* 0.5);
@@ -80,5 +84,11 @@ void Pipe::testEnemyCollision(Enemy &enemy, Pipe& other){
 			enemy.setPosition(other.getX() - other.getWidth(), other.getY() + other.getHeight() - enemy.getHeight()* 0.5);
 			enemy.toggleDirection();
 		}
+
+		pipeTravelSound.play();
 	}
+
+
 }
+
+

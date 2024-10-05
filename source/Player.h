@@ -2,6 +2,7 @@
 #define SOURCE_PLAYER_H_
 
 #include<SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include"Plataform.h"
 #include "Enemy.h"
 
@@ -22,6 +23,15 @@ private:
 
 	float vx;
 	float vy;
+
+	sf::SoundBuffer bufferKillEnemy;
+	sf::Sound killEnemySound;
+
+	sf::SoundBuffer bufferDownEnemy;
+	sf::Sound downEnemySound;
+
+	sf::SoundBuffer bufferJumpSound;
+	sf::Sound jumpSound;
 
 public:
 	bool alive;
@@ -45,7 +55,7 @@ public:
 	bool onGround(Plataform ground); //teste se ele esta em cima do chão
 	void testCollisionPlataform(Plataform plataform); //testa se ele esta batendo em alguma plataforma
 	void testCollisionEnemy(Enemy& enemy);
-	void killEnemy(Plataform &plataform, Enemy& enemy);
+	void downEnemy(Plataform &plataform, Enemy& enemy);
 
 
 

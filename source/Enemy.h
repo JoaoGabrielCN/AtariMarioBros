@@ -5,6 +5,7 @@
 #include"Plataform.h"
 #include"Player.h"
 #include <string>
+#include <SFML/Audio.hpp>
 
 using namespace std;
 

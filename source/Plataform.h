@@ -2,6 +2,7 @@
 #define SOURCE_PLATAFORM_H_
 
 #include<SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include<string>
 
 class Plataform {

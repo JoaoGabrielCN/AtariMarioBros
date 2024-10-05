@@ -13,11 +13,21 @@ Player::Player(sf::RenderWindow &janela) { //construtor que define os atributos 
 	x = 0;
 	y = 0;
 
-	vx = 6;
+	vx = 5;
 	vy = 0;
 
 	gravity = 0.65;
 	jumpHeight = 14;
+
+	bufferKillEnemy.loadFromFile("assets/kill.wav");
+	killEnemySound.setBuffer(bufferKillEnemy);
+
+	bufferDownEnemy.loadFromFile("assets/down.wav");
+	downEnemySound.setBuffer(bufferDownEnemy);
+
+	bufferJumpSound.loadFromFile("assets/jump.wav");
+	jumpSound.setBuffer(bufferJumpSound);
+	jumpSound.setVolume(50);
 
 	sprite.setPosition(x, y);
 	sprite.setOrigin(getWidth() * 0.5, getHeight() * 0.5); //define a origem para o meio do sprite
@@ -34,7 +44,7 @@ void Player::update(Plataform ground) { // atualiza a posiçao do player
 
 void Player::walk() {
 
-	vx = 6;
+	vx = 5;
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) //anda para direita
 	|| sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
@@ -51,10 +61,10 @@ void Player::walk() {
 	}
 
 	if (x - getWidth() * 0.5 > window->getSize().x) { //faz ele ir de um lado da tela pro outro
-		setX(0);
+		x = 0;
 	}
 	if (x + getWidth() * 0.5 < 0) {
-		setX(window->getSize().x);
+		x = window->getSize().x;
 	}
 }
 
@@ -70,6 +80,7 @@ void Player::jump(Plataform newPlataform) {
 		vy = -jumpHeight;
 		setY(y - 1);
 		setPosition(x, y);
+		jumpSound.play();
 	}
 
 	if (!onGround(newPlataform)) { //atualiza a velocidade no ar
@@ -121,12 +132,14 @@ void Player::testCollisionPlataform(Plataform plataform) { //colisao horizontal 
 	}
 }
 
-void Player::killEnemy(Plataform &plataform, Enemy &enemy) {
+void Player::downEnemy(Plataform &plataform, Enemy &enemy) {
 	if(belowPlataform && enemy.getX() + 35 > getX() && enemy.getX() - 35 < getX() &&
 	enemy.onGround(plataform) && y - enemy.getY() < 100 && enemy.getY() - y < 100){
 
 		enemy.downed = true;
 		enemy.sprite.setColor(sf::Color::Red);
+		downEnemySound.play();
+
 	}
 
 }
@@ -139,6 +152,7 @@ void Player::testCollisionEnemy(Enemy &enemy) {
 		}
 		if(enemy.downed){
 			enemy.alive = false;
+			killEnemySound.play();
 		}
 
 	}

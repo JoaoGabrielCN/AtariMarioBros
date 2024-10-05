@@ -9,6 +9,7 @@
 #define SOURCE_PIPE_H_
 
 #include<SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include"Enemy.h"
 
 class Pipe {
@@ -18,6 +19,9 @@ private:
 	int scale;
 
 	sf::Texture texture;
+
+	sf::SoundBuffer bufferPipeTravel;
+	sf::Sound pipeTravelSound;
 
 public:
 	sf::Sprite sprite;
@@ -39,7 +43,9 @@ public:
 
 	void setScale(int scale);
 
-	void testEnemyCollision(Enemy& enemy, Pipe& other);
+	void pipeTravel(Enemy& enemy, Pipe& other);
+
+	void setSoundBuffer(sf::SoundBuffer& soundBuffer);
 };
 
 #endif /* SOURCE_PIPE_H_ */
