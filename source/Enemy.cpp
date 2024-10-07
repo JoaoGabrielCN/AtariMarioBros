@@ -1,102 +1,112 @@
-/*
- * Enemy.cpp
- *
- *  Created on: 29 de ago. de 2024
- *      Author: Aldo
- */
-
 #include "Enemy.h"
 
+Enemy::Enemy(sf::RenderWindow &janela, int direction, sf::Texture& texture) {
 
-Enemy::Enemy(sf::RenderWindow &janela , int direction, sf::Texture& texture) {
+    this->texture = texture;
 
-	this->texture = texture;
+    alive = true;
+    downed = false;
 
-	alive = true;
-	downed = false;
+    window = &janela;
+
+    x = 0;
+    y = 0;
+    vx = 1.1;
+    vy = 0;
+
+    this->direction = direction;
+    alive = true;
+    gravity = 4;
+
+    frameSize = sf::Vector2i(190 / 4, 49);
+    atualFrame = 0;
+    animationClock.restart();
 
 
-	window = &janela;
+    sprite.setTexture(texture);
+    sprite.setTextureRect(sf::IntRect(0, 0, frameSize.x, frameSize.y));
 
-	x = 0;
-	y = 0;
-	vx = 1.2;
-	vy = 0;
+    // Define a origem com base no frame
+    sprite.setOrigin(frameSize.x * 0.5, frameSize.y * 0.5);
 
-	this->direction = direction;
-
-	alive = true;
-	gravity = 4;
-
-
-	sprite.setTexture(texture);
-	sprite.setOrigin(getWidth() * 0.5, getHeight() * 0.5);
-	setPosition(x, y);
+    setPosition(x, y);  // Posição inicial
 }
 
+void Enemy::updateAnimation() {
+    if (downed) {
+        return;
+    }
 
-
+    if (animationClock.getElapsedTime().asSeconds() > 0.3f) {
+        atualFrame = (atualFrame + 1) % 3;
+        sprite.setTextureRect(sf::IntRect(atualFrame * frameSize.x, 0, frameSize.x, frameSize.y));
+        sprite.setOrigin(frameSize.x * 0.5, frameSize.y * 0.5);
+        animationClock.restart();
+    }
+}
 
 void Enemy::update(Plataform ground) {
-
-
-
-	walk();
-	onGround(ground);
-	setPosition(x, y);
+    walk();
+    onGround(ground);
+    setPosition(x, y);
+    updateAnimation();
 }
 
 void Enemy::walk() {
+    if (!alive) {
+        x = 10000;
+    }
 
-	if(!alive){
-		x = 10000;
-	}
+    if (downed) {
+        vx = 0;
+        sprite.setTextureRect(sf::IntRect(150, 0, 50, frameSize.y));
+        return;
+    }
 
-	if(downed){
-		vx = 0;
-		sprite.setColor(sf::Color::Red);
-		return;
-	}
 
-	if (direction == 1) {
-		vx = 1.2;
-		sprite.setScale(-1, 1);
-	} else {
+    if (direction == 1) {
+        vx = 1.1;
+        sprite.setScale(1, 1);
+    } else {
+        vx = -1.1;
+        sprite.setScale(-1, 1);
+    }
 
-		vx = -1.2;
-		sprite.setScale(1, 1);
-	}
-
-	x += vx;
-	testWindowColission();
-
+    x += vx;
+    testWindowColission();
 }
 
 bool Enemy::onGround(Plataform ground) {
-	if (sprite.getGlobalBounds().intersects(ground.sprite.getGlobalBounds())) {
-		vy = 0;
-		setY(ground.getY() - getHeight() * 0.5 + 1);
+    if (sprite.getGlobalBounds().intersects(ground.sprite.getGlobalBounds())) {
+        vy = 0;
+        setY(ground.getY() - getHeight() * 0.5 + 1);
+        return true;
+    } else {
+        vy = gravity;
+    }
 
-		return true;
-	}else{
-		vy = gravity;
-	}
-
-	y += vy;
-
-	return false;
+    y += vy;
+    return false;
 }
 
-
 void Enemy::testEnemyCollsion(Enemy &other) {
-    if (this != &other && sprite.getGlobalBounds().intersects(other.sprite.getGlobalBounds())) {
 
+    if (this != &other && sprite.getGlobalBounds().intersects(other.sprite.getGlobalBounds()) && !this->downed) {
+
+
+    		if(vy > other.vy){
+    			if(other.x < x){
+    				x = x + 5;
+    			}else{
+    				x = x - 5;
+    			}
+    		}
     		direction = -direction;
             vx = -vx;
             other.setDirection(-other.getDirection());
             other.setVx(-other.getVx());
+    		}
 
-        }
     }
 
 
@@ -167,13 +177,12 @@ void Enemy::setY(float y) {
 }
 
 float Enemy::getHeight() {
-	return sprite.getGlobalBounds().height;
+    return frameSize.y;
 }
 
 float Enemy::getWidth() {
-	return sprite.getGlobalBounds().width;
+    return frameSize.x;
 }
-
 void Enemy::setDirection(int num){
 	direction = num;
 }

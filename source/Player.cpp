@@ -137,7 +137,6 @@ void Player::downEnemy(Plataform &plataform, Enemy &enemy) {
 	enemy.onGround(plataform) && y - enemy.getY() < 100 && enemy.getY() - y < 100){
 
 		enemy.downed = true;
-		enemy.sprite.setColor(sf::Color::Red);
 		downEnemySound.play();
 
 	}

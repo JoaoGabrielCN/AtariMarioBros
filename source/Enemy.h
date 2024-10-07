@@ -5,6 +5,7 @@
 #include"Plataform.h"
 #include"Player.h"
 #include <string>
+#include<iostream>
 #include <SFML/Audio.hpp>
 
 using namespace std;
@@ -22,15 +23,22 @@ private:
 	float vx;
 	float vy;
 
+	sf::Vector2i frameSize;
+	int atualFrame;
+
+	sf::Clock animationClock;
+
+
 public:
 	bool alive;
 	int direction;
 	bool downed;
 	bool clockStarted;
+	sf::Clock clock;
 
 	sf::Texture texture;
 	sf::Sprite sprite;
-	sf::Clock clock;
+
 
 	Enemy(sf::RenderWindow &janela, int direction, sf::Texture& texture);
 	void update(Plataform ground);
@@ -61,6 +69,9 @@ public:
 	float getWidth();
 
 	void testWindowColission();
+
+	void updateAnimation();
+
 };
 
 #endif /* SOURCE_ENEMY_H_ */

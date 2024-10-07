@@ -9,8 +9,8 @@ void Game::run() {
 		eventsLoop();
 		update();
 		draw();
-
 	}
+
 }
 
 void Game::eventsLoop() {
@@ -20,10 +20,10 @@ void Game::eventsLoop() {
 			window.close();
 		}
 
-		// Detecta o clique do mouse quando o jogo está pausado
 		if(pause()) testRestartClick();
-
 	}
+
+
 }
 
 void Game::update() {
@@ -88,9 +88,9 @@ void Game::update() {
 		}
 
 		for (unsigned int j = 0; j < enemies.size(); ++j) {
-			if (i != j) {
+
 				enemies[i].testEnemyCollsion(enemies[j]);
-			}
+
 		}
 
 		pipes[0].pipeTravel(enemies[i], pipes[2]);
@@ -121,9 +121,25 @@ void Game::draw() {
 
 		window.display();
 	} else {
+
+		if(!playSound){
+		if(player.alive){
+			resultMusic.openFromFile("assets/win.wav");
+		}else{
+			resultMusic.openFromFile("assets/loose.wav");
+		}
+
+			resultMusic.play();
+			playSound = true;
+
+
+
+		}
+		result.setPosition(window.getSize().x / 2 - result.getGlobalBounds().width / 2, 310);
 		theme.stop();
 		window.clear();
 		window.draw(gameOverText);
+		window.draw(result);
 		window.draw(restartButton);
 		window.draw(restartButtonText);
 		window.display();
@@ -131,7 +147,14 @@ void Game::draw() {
 }
 
 bool Game::pause() {
+
+
+
 	if (!player.alive) {
+		result.setString("Voce Perdeu!");
+		result.setFillColor(sf::Color::Red);
+		bufferResult.loadFromFile("assets/loose.wav");
+		resultSound.setBuffer(bufferResult);
 		return true;
 	}
 
@@ -143,6 +166,10 @@ bool Game::pause() {
 	}
 
 	if (cont == static_cast<int>(enemies.size())) {
+		result.setString("Voce Ganhou!");
+		result.setFillColor(sf::Color::Green);
+		bufferResult.loadFromFile("assets/win.wav");
+		resultSound.setBuffer(bufferResult);
 		return true;
 	}
 
@@ -153,6 +180,7 @@ void Game::initializeVar() {
 	window.setVerticalSyncEnabled(true); // ativa VSync
 	window.setFramerateLimit(200);
 
+	playSound = false;
 
 	setTextures();
 	setSounds();
@@ -175,15 +203,20 @@ void Game::initializeVar() {
 void Game::setEnemies() {
 	Enemy newEnemy(window, 1, enemyTexture);
 
-	newEnemy.setPosition(50, 110 - newEnemy.getHeight() * 0.5);
+	newEnemy.setPosition(25, 110 - newEnemy.getHeight() * 0.5);
 	enemies.push_back(newEnemy);
 
 	newEnemy.setPosition(700, 110 - newEnemy.getHeight() * 0.5);
 	newEnemy.setDirection(-1);
 	enemies.push_back(newEnemy);
 
-	newEnemy.setPosition(window.getSize().x * 0.5, 230 - newEnemy.getHeight() * 0.5);
+	newEnemy.setPosition(window.getSize().x * 0.5 + 150, 230 - newEnemy.getHeight() * 0.5);
 	newEnemy.setDirection(1);
+	enemies.push_back(newEnemy);
+
+
+	newEnemy.setPosition(window.getSize().x * 0.5 - 50, 230 - newEnemy.getHeight() * 0.5);
+	newEnemy.setDirection(-1);
 	enemies.push_back(newEnemy);
 }
 
@@ -233,7 +266,7 @@ void Game::setPipes() {
 }
 
 void Game::setTextures() {
-	enemyTexture.loadFromFile("assets/koopa.png");
+	enemyTexture.loadFromFile("assets/koopa_sprites.png");
 	plataformsTexture.loadFromFile("assets/plataform.png");
 	floorTexture.loadFromFile("assets/floor.png");
 	pipeTexture.loadFromFile("assets/pipe.png");
@@ -246,13 +279,15 @@ void Game::setSounds() {
 	theme.setLoop(true);
 	theme.play();
 
+
+
 	bufferPow.loadFromFile("assets/pow_sound.wav");
 	powSound.setBuffer(bufferPow);
 }
 
 void Game::testRestartClick() {
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
 		resetGame();
 	}
 }
@@ -265,11 +300,14 @@ void Game::resetGame() {
 	    plataforms.clear();
 	    pipes.clear();
 
+	   playSound = false;
+
 	    Plataform floor(floorTexture);
 	   	floor.setPosition(0, window.getSize().y - floor.getHeight());
 	   	plataforms.push_back(floor);
 
-
+	   	playSound = false;
+	   	powButton.reset();
 	    powButton.setTexture(powTexture);
 	    powButton.setPosition(window.getSize().x * 0.5 - powButton.getWidht() * 0.5, 410);
 
@@ -288,16 +326,21 @@ void Game::setTexts(){
 
 	font.loadFromFile("assets/font.ttf");
 	gameOverText.setFont(font);
-	gameOverText.setString("Game Over");
+	gameOverText.setString("Fim de jogo");
 	gameOverText.setCharacterSize(50);
-	gameOverText.setFillColor(sf::Color::Red);
+	gameOverText.setFillColor(sf::Color::White);
 	gameOverText.setPosition(window.getSize().x / 2 - gameOverText.getGlobalBounds().width / 2, 150);
 
 	restartButtonText.setFont(font);
-	restartButtonText.setString("Pressione 1 para reiniciar");
+	restartButtonText.setString("Pressione Enter para reiniciar");
 	restartButtonText.setCharacterSize(30);
 	restartButtonText.setFillColor(sf::Color::White);
-	restartButtonText.setPosition(window.getSize().x / 2 - restartButtonText.getGlobalBounds().width / 2, 310);
+	restartButtonText.setPosition(window.getSize().x / 2 - restartButtonText.getGlobalBounds().width / 2, 480);
+
+	result.setFont(font);
+	result.setCharacterSize(50);
+
+
 
 
 }

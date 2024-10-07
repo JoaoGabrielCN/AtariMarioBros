@@ -6,7 +6,6 @@
 #include"Plataform.h"
 #include "Enemy.h"
 
-
 class Enemy;
 
 class Player {
@@ -33,6 +32,10 @@ private:
 	sf::SoundBuffer bufferJumpSound;
 	sf::Sound jumpSound;
 
+	int currentFrame;
+	float frameTime;
+	float elapsedTime;
+
 public:
 	bool alive;
 
@@ -43,6 +46,7 @@ public:
 
 	float getX();
 	float getY();
+	void updateAnimation();
 
 	void setX(float x);
 	void setY(float y);
@@ -54,16 +58,11 @@ public:
 
 	bool onGround(Plataform ground); //teste se ele esta em cima do chão
 	void testCollisionPlataform(Plataform plataform); //testa se ele esta batendo em alguma plataforma
-	void testCollisionEnemy(Enemy& enemy);
-	void downEnemy(Plataform &plataform, Enemy& enemy);
-
-
+	void testCollisionEnemy(Enemy &enemy);
+	void downEnemy(Plataform &plataform, Enemy &enemy);
 
 	sf::Sprite sprite;
 	Player(sf::RenderWindow &janela);
 };
-
-
-
 
 #endif /* SOURCE_PLAYER_H_ */

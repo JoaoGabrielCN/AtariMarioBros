@@ -1,10 +1,3 @@
-/*
- * Pipe.h
- *
- *  Created on: 2 de out. de 2024
- *      Author: Aldo
- */
-
 #ifndef SOURCE_PIPE_H_
 #define SOURCE_PIPE_H_
 

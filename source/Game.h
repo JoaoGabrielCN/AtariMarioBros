@@ -33,12 +33,15 @@ private:
 	sf::Music theme;
 	sf::SoundBuffer bufferPow;
 	sf::Sound powSound;
+	sf::SoundBuffer bufferResult;
+	sf::Sound resultSound;
+	sf::Music resultMusic;
 
     sf::Font font;
     sf::Text gameOverText;
     sf::RectangleShape restartButton;
     sf::Text restartButtonText;
-
+    sf::Text result;
 
 	bool pause();
 	void eventsLoop();
@@ -54,6 +57,7 @@ private:
 	void testRestartClick();
 	void resetGame();
 	void setTexts();
+	bool playSound;
 
   ;
 

@@ -1,10 +1,3 @@
-/*
- * PowBlock.h
- *
- *  Created on: 3 de out. de 2024
- *      Author: Aldo
- */
-
 #ifndef SOURCE_POWBLOCK_H_
 #define SOURCE_POWBLOCK_H_
 #include "Plataform.h"
@@ -15,6 +8,7 @@ public:
 
 	int lifes;
 	void update();
+	void reset();
 };
 
 #endif /* SOURCE_POWBLOCK_H_ */
