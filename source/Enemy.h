@@ -25,7 +25,6 @@ private:
 
 	sf::Vector2i frameSize;
 	int atualFrame;
-
 	sf::Clock animationClock;
 
 

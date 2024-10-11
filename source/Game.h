@@ -22,13 +22,15 @@ private:
 	vector<Plataform> plataforms;
 	vector<Pipe> pipes;
 	PowBlock powButton;
-
+	bool playSound;
 
 	sf::Texture enemyTexture;
 	sf::Texture plataformsTexture;
 	sf::Texture floorTexture;
 	sf::Texture pipeTexture;
 	sf::Texture powTexture;
+	sf::Texture backgroundTexture;
+	sf::Sprite backgroundSprite;
 
 	sf::Music theme;
 	sf::SoundBuffer bufferPow;
@@ -37,11 +39,11 @@ private:
 	sf::Sound resultSound;
 	sf::Music resultMusic;
 
-    sf::Font font;
-    sf::Text gameOverText;
-    sf::RectangleShape restartButton;
-    sf::Text restartButtonText;
-    sf::Text result;
+	sf::Font font;
+	sf::Text gameOverText;
+	sf::RectangleShape restartButton;
+	sf::Text restartButtonText;
+	sf::Text result;
 
 	bool pause();
 	void eventsLoop();
@@ -57,11 +59,8 @@ private:
 	void testRestartClick();
 	void resetGame();
 	void setTexts();
-	bool playSound;
 
-  ;
-
-
+	;
 
 public:
 	Game();

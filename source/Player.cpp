@@ -5,7 +5,7 @@
 Player::Player(sf::RenderWindow &janela) { //construtor que define os atributos iniciais do player
 	window = &janela;
 
-	texture.loadFromFile("assets/mario.png");
+	texture.loadFromFile("assets/mario_sprites.png");
 	sprite.setTexture(texture);
 
 	alive = true;
@@ -29,7 +29,12 @@ Player::Player(sf::RenderWindow &janela) { //construtor que define os atributos 
 	jumpSound.setBuffer(bufferJumpSound);
 	jumpSound.setVolume(50);
 
+	frameSize = sf::Vector2i(170 / 3, 70);
+	atualFrame = 0;
+	animationClock.restart();
+
 	sprite.setPosition(x, y);
+	sprite.setTextureRect(sf::IntRect(50, 0, frameSize.x, frameSize.y));
 	sprite.setOrigin(getWidth() * 0.5, getHeight() * 0.5); //define a origem para o meio do sprite
 }
 
@@ -37,28 +42,49 @@ void Player::update(Plataform ground) { // atualiza a posiçao do player
 	walk();
 	jump(ground);
 	testCollisionPlataform(ground);
+	testWindowCollision();
 	sprite.setPosition(x, y);
+}
 
+void Player::updateAnimation(){
 
+	if (animationClock.getElapsedTime().asSeconds() > 0.3) {
+		atualFrame = (atualFrame + 1) % 3;
+		sprite.setTextureRect(
+		sf::IntRect(atualFrame * frameSize.x, 0, frameSize.x,frameSize.y));
+		sprite.setOrigin(frameSize.x * 0.5, frameSize.y * 0.5);
+		animationClock.restart();
+	}
 }
 
 void Player::walk() {
 
-	vx = 5;
+
+	if(vx == 0) sprite.setTextureRect(sf::IntRect(50, 0, frameSize.x, frameSize.y));
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) //anda para direita
 	|| sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+
+		vx = 5;
 		x += vx;
 		sprite.setScale(1, 1);
-	}
+		updateAnimation();
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) //anda para esquerda
+	}else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) //anda para esquerda
 	|| sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+
+		vx = 5;
 		vx = -vx;
 		x += vx;
-
 		sprite.setScale(-1, 1); // gira o sprite do playet
+		updateAnimation();
+
+	}else{
+		vx = 0;
 	}
+}
+
+void Player::testWindowCollision(){
 
 	if (x - getWidth() * 0.5 > window->getSize().x) { //faz ele ir de um lado da tela pro outro
 		x = 0;
@@ -78,7 +104,7 @@ void Player::jump(Plataform newPlataform) {
 
 	if (pressed && onGround(newPlataform)) { //faz ele oular
 		vy = -jumpHeight;
-		setY(y - 1);
+		y--;
 		setPosition(x, y);
 		jumpSound.play();
 	}

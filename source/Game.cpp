@@ -34,16 +34,14 @@ void Game::update() {
 	bool playerUpdated = false;
 
 	for (unsigned int i = 0; i < plataforms.size(); ++i) {
-		if (player.sprite.getGlobalBounds().intersects(
-				plataforms[i].sprite.getGlobalBounds())) {
+		if (player.sprite.getGlobalBounds().intersects(plataforms[i].sprite.getGlobalBounds())) {
 			player.update(plataforms[i]);
 			playerUpdated = true;
 			break;
 		}
 	}
 
-	if (player.sprite.getGlobalBounds().intersects(
-			powButton.sprite.getGlobalBounds())) {
+	if (player.sprite.getGlobalBounds().intersects(powButton.sprite.getGlobalBounds())) {
 		player.update(powButton);
 		playerUpdated = true;
 
@@ -64,14 +62,12 @@ void Game::update() {
 		bool enemyUpdated = false;
 
 		for (unsigned int j = 0; j < plataforms.size(); ++j) {
-			if (enemies[i].sprite.getGlobalBounds().intersects(
-					plataforms[j].sprite.getGlobalBounds())) {
+			if (enemies[i].sprite.getGlobalBounds().intersects(plataforms[j].sprite.getGlobalBounds())) {
 				enemies[i].update(plataforms[j]);
 				enemyUpdated = true;
 				break;
 			}
 		}
-
 		player.testCollisionEnemy(enemies[i]);
 
 		for (unsigned int j = 0; j < plataforms.size(); ++j) {
@@ -86,9 +82,7 @@ void Game::update() {
 		if (enemies[i].downed) {
 			enemies[i].getUp();
 		}
-
 		for (unsigned int j = 0; j < enemies.size(); ++j) {
-
 				enemies[i].testEnemyCollsion(enemies[j]);
 
 		}
@@ -103,7 +97,10 @@ void Game::update() {
 void Game::draw() {
 	window.clear();
 
+
 	if (!pause()) {
+
+		window.draw(backgroundSprite);
 		for (unsigned int i = 0; i < pipes.size(); i++) {
 			window.draw(pipes[i].sprite);
 		}
@@ -153,7 +150,6 @@ bool Game::pause() {
 	if (!player.alive) {
 		result.setString("Voce Perdeu!");
 		result.setFillColor(sf::Color::Red);
-		bufferResult.loadFromFile("assets/loose.wav");
 		resultSound.setBuffer(bufferResult);
 		return true;
 	}
@@ -168,7 +164,6 @@ bool Game::pause() {
 	if (cont == static_cast<int>(enemies.size())) {
 		result.setString("Voce Ganhou!");
 		result.setFillColor(sf::Color::Green);
-		bufferResult.loadFromFile("assets/win.wav");
 		resultSound.setBuffer(bufferResult);
 		return true;
 	}
@@ -269,8 +264,10 @@ void Game::setTextures() {
 	enemyTexture.loadFromFile("assets/koopa_sprites.png");
 	plataformsTexture.loadFromFile("assets/plataform.png");
 	floorTexture.loadFromFile("assets/floor.png");
-	pipeTexture.loadFromFile("assets/pipe.png");
+	pipeTexture.loadFromFile("assets/pipe_2.png");
 	powTexture.loadFromFile("assets/pow.png");
+	backgroundTexture.loadFromFile("assets/background.png");
+	backgroundSprite.setTexture(backgroundTexture);
 }
 
 void Game::setSounds() {
@@ -339,8 +336,6 @@ void Game::setTexts(){
 
 	result.setFont(font);
 	result.setCharacterSize(50);
-
-
 
 
 }

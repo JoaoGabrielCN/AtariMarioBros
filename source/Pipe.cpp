@@ -85,7 +85,7 @@ void Pipe::pipeTravel(Enemy &enemy, Pipe& other){
 			enemy.toggleDirection();
 		}
 
-		pipeTravelSound.play();
+		//pipeTravelSound.play();
 	}
 
 

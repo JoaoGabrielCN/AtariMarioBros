@@ -32,17 +32,19 @@ private:
 	sf::SoundBuffer bufferJumpSound;
 	sf::Sound jumpSound;
 
-	int currentFrame;
-	float frameTime;
-	float elapsedTime;
+	sf::Vector2i frameSize;
+	int atualFrame;
+	sf::Clock animationClock;
 
 public:
 	bool alive;
+	bool belowPlataform;
+	sf::Sprite sprite;
 
 	void update(Plataform ground);
 	void walk();
 	void jump(Plataform ground);
-	bool belowPlataform;
+
 
 	float getX();
 	float getY();
@@ -59,10 +61,12 @@ public:
 	bool onGround(Plataform ground); //teste se ele esta em cima do chão
 	void testCollisionPlataform(Plataform plataform); //testa se ele esta batendo em alguma plataforma
 	void testCollisionEnemy(Enemy &enemy);
+	void testWindowCollision();
 	void downEnemy(Plataform &plataform, Enemy &enemy);
 
-	sf::Sprite sprite;
+
 	Player(sf::RenderWindow &janela);
+
 };
 
 #endif /* SOURCE_PLAYER_H_ */
